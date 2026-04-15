@@ -1,0 +1,21 @@
+/* FAQ Simples - Estilos básicos */
+.faq-card {
+    transition: all 0.2s ease;
+}
+
+.faq-header {
+    transition: background-color 0.2s ease;
+}
+
+.faq-content {
+    transition: all 0.3s ease;
+}
+
+.faq-arrow {
+    transition: transform 0.3s ease;
+}
+
+/* Previne scroll */
+.faq-header:focus {
+    outline: none;
+}
