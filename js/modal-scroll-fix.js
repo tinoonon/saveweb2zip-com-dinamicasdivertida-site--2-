@@ -22,17 +22,20 @@
         mutations.forEach(function(mutation) {
             mutation.addedNodes.forEach(function(node) {
                 if (node.nodeType === 1) {
-                    // Verifica se é o overlay do modal (fundo escuro)
+                    // Verifica se é o overlay do modal (fundo escuro) E tem o atributo data-state
                     if (node.classList && (
                         node.classList.contains('fixed') && 
                         node.classList.contains('inset-0') &&
-                        node.classList.contains('z-50')
+                        node.classList.contains('z-50') &&
+                        node.classList.contains('bg-black/40')
                     )) {
                         blockScroll();
                     }
                     
-                    // Verifica se é o conteúdo do modal
-                    if (node.getAttribute && node.getAttribute('role') === 'dialog') {
+                    // Verifica se é o conteúdo do modal (não accordion)
+                    if (node.getAttribute && 
+                        node.getAttribute('role') === 'dialog' &&
+                        !node.closest('[data-orientation="vertical"]')) {
                         blockScroll();
                     }
                 }
@@ -44,12 +47,15 @@
                     if (node.classList && (
                         node.classList.contains('fixed') && 
                         node.classList.contains('inset-0') &&
-                        node.classList.contains('z-50')
+                        node.classList.contains('z-50') &&
+                        node.classList.contains('bg-black/40')
                     )) {
                         unblockScroll();
                     }
                     
-                    if (node.getAttribute && node.getAttribute('role') === 'dialog') {
+                    if (node.getAttribute && 
+                        node.getAttribute('role') === 'dialog' &&
+                        !node.closest('[data-orientation="vertical"]')) {
                         unblockScroll();
                     }
                 }
@@ -77,11 +83,16 @@
         const target = e.target;
         const button = target.closest('button');
         
+        // Ignora cliques em accordions
+        if (target.closest('[data-orientation="vertical"]')) {
+            return;
+        }
+        
         if (button && button.textContent.includes('QUERO COMPRAR')) {
             // Aguarda um pouco para o modal abrir
             setTimeout(function() {
                 const modal = document.querySelector('[role="dialog"]');
-                if (modal) {
+                if (modal && !modal.closest('[data-orientation="vertical"]')) {
                     blockScroll();
                 }
             }, 100);
@@ -89,3 +100,4 @@
     });
     
 })();
+
